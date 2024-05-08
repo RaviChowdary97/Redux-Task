@@ -85,7 +85,12 @@ export default function CardList() {
       <NavBar />
       <div
         className="d-flex flex-wrap  text-white "
-        style={{ gap: "3%", marginBottom: "20px", marginTop: "55px" }}
+        style={{
+          gap: "3%",
+          marginBottom: "20px",
+          marginTop: "55px",
+          height: "600px",
+        }}
       >
         {products.map((elements) => (
           <CardUi
@@ -93,7 +98,11 @@ export default function CardList() {
             {...elements}
             id={elements.id}
             addItem={
-              <button onClick={() => handleAddItem(elements)}>
+              <button
+                className="btn btn-primary"
+                style={{ border: "none" }}
+                onClick={() => handleAddItem(elements)}
+              >
                 Add Item Store
               </button>
             }

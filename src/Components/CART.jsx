@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { clearItem, removeItem } from "./CARTSLICE";
+import { addItem, clearItem, removeItem } from "./CARTSLICE";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const cartItems = useSelector((store) => store.cart.items);
@@ -9,10 +10,6 @@ const Cart = () => {
 
   const handleClearCart = () => {
     dispatch(clearItem());
-  };
-
-  const handleRemoveOneItem = () => {
-    dispatch(removeItem());
   };
 
   const calculateTotalPrice = () => {
@@ -30,28 +27,48 @@ const Cart = () => {
     });
     if (totalPrice > 200) {
       return "FREE";
+    } else if (totalPrice == 0) {
+      return "$0";
     } else {
       return "$20 Has to pay";
     }
   };
+  const navigate = useNavigate();
 
   return (
     <>
       <div style={{ backgroundColor: "lightblue", padding: "20px" }}>
         <div
           style={{
-            marginBottom: "20px",
             color: "green",
-            marginLeft: "550px",
+            marginLeft: "500px",
+            marginBottom: "9px",
           }}
         >
-          Cart-{cartItems.length}
+          Total Quantity - {cartItems.length}
+        </div>
+
+        <div
+          style={{ marginLeft: "505px", color: "blue", marginBottom: "9px" }}
+        >
+          Total Price: ${calculateTotalPrice()}
+        </div>
+        <div
+          style={{
+            marginLeft: "510px",
+            marginBottom: "9px",
+            color: "brown",
+          }}
+        >
+          SHIPPING : {shipping()}
         </div>
         <button
           style={{
-            backgroundColor: "crimson",
+            backgroundColor: "red",
             borderRadius: "9px",
-            marginLeft: "450px",
+            marginLeft: "500px",
+            border: "none",
+            padding: "7px",
           }}
           onClick={() => handleClearCart()}
         >
@@ -59,29 +76,19 @@ const Cart = () => {
         </button>
         <button
           style={{
-            backgroundColor: "green",
+            backgroundColor: "yellowgreen",
             borderRadius: "9px",
-            marginLeft: "50px",
+            border: "none",
+            marginLeft: "15px",
+            padding: "7px",
           }}
-          onClick={() => handleRemoveOneItem()}
+          onClick={() => navigate("/")}
         >
-          Remove 1 Item
+          Back
         </button>
-        <div style={{ paddingTop: "30px", marginLeft: "500px", color: "blue" }}>
-          Total Price: ${calculateTotalPrice()}
-        </div>
-        <div
-          style={{
-            marginLeft: "450px",
-            marginTop: "5px",
-            color: "brown",
-          }}
-        >
-          SHIPPING : {shipping()}
-        </div>
       </div>
       <div className="d-flex flex-wrap">
-        {cartItems.map((element, index) => (
+        {cartItems.map((element) => (
           <CartCard {...element} />
         ))}
       </div>
@@ -92,6 +99,7 @@ const Cart = () => {
 export default Cart;
 
 const CartCard = ({
+  id,
   title,
   description,
   thumbnail,
@@ -99,16 +107,38 @@ const CartCard = ({
   discountPercentage,
   rating,
   stock,
+  quantity,
 }) => {
+  const dispatch = useDispatch();
+
+  const handleRemoveOneItem = () => {
+    dispatch(removeItem(id));
+  };
+
+  const handleAddOneItem = () => {
+    dispatch(
+      addItem({
+        id,
+        title,
+        description,
+        thumbnail,
+        price,
+        discountPercentage,
+        rating,
+        stock,
+      })
+    );
+  };
+
   return (
     <>
       <div
-        className="card d-flex  flex-column  justify-content-center align-items-center"
+        className="card d-flex flex-column justify-content-center align-items-center gap-20"
         style={{
           width: "14rem",
           marginTop: "3%",
           marginLeft: "3.5%",
-          height: "330px",
+          height: "auto",
         }}
       >
         <img src={thumbnail} className="card-img-top" alt="..." />
@@ -120,8 +150,16 @@ const CartCard = ({
           </div>
           <p className="text-center">{description}</p>
           <p className="text-center">Discount-{discountPercentage}%</p>
-
           <p className="text-center">Available Stock- {stock}</p>
+          <div className="d-flex justify-content-between">
+            <button className="btn btn-primary" onClick={handleAddOneItem}>
+              +
+            </button>
+            <span>{quantity}</span>
+            <button className="btn btn-warning" onClick={handleRemoveOneItem}>
+              -
+            </button>
+          </div>
         </div>
       </div>
     </>
