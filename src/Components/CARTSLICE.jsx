@@ -10,7 +10,7 @@ const CARTSLICE = createSlice({
       const newItem = { ...action.payload, quantity: 1 };
       state.items.push(newItem);
     },
-    clearItem: (state, action) => {
+    clearItem: (state) => {
       state.items = [];
     },
     removeItem: (state, action) => {
@@ -18,7 +18,11 @@ const CARTSLICE = createSlice({
         (item) => item.id === action.payload
       );
       if (itemIndex !== -1) {
-        state.items.splice(itemIndex, 1);
+        if (state.items[itemIndex].quantity > 1) {
+          state.items[itemIndex].quantity -= 1;
+        } else {
+          state.items.splice(itemIndex, 1);
+        }
       }
     },
     incrementQuantity: (state, action) => {

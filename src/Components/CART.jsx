@@ -37,38 +37,10 @@ const Cart = () => {
 
   return (
     <>
-      <div style={{ backgroundColor: "#F8F9FA", padding: "20px" }}>
-        <div style={{ textAlign: "center" }}>
-          <button
-            style={{
-              backgroundColor: "red",
-              borderRadius: "9px",
-              border: "none",
-              padding: "7px",
-              marginRight: "10px",
-              color: "white",
-            }}
-            onClick={() => handleClearCart()}
-          >
-            Clear Cart
-          </button>
-          <button
-            style={{
-              backgroundColor: "yellowgreen",
-              borderRadius: "9px",
-              border: "none",
-              padding: "7px",
-              color: "white",
-            }}
-            onClick={() => navigate("/")}
-          >
-            Back
-          </button>
-        </div>
+      <div style={{ backgroundColor: "lightblue", padding: "20px" }}>
         <div
           style={{
-            color: "black",
-            fontWeight: "bold",
+            color: "green",
             textAlign: "center",
             marginBottom: "9px",
           }}
@@ -78,7 +50,7 @@ const Cart = () => {
         </div>
 
         <div
-          style={{ textAlign: "center", color: "#212529", marginBottom: "9px" }}
+          style={{ textAlign: "center", color: "blue", marginBottom: "9px" }}
         >
           Total Price: ${calculateTotalPrice()}
         </div>
@@ -90,6 +62,31 @@ const Cart = () => {
           }}
         >
           SHIPPING : {shipping()}
+        </div>
+        <div style={{ textAlign: "center" }}>
+          <button
+            style={{
+              backgroundColor: "red",
+              borderRadius: "9px",
+              border: "none",
+              padding: "7px",
+              marginRight: "10px",
+            }}
+            onClick={() => handleClearCart()}
+          >
+            Clear Cart
+          </button>
+          <button
+            style={{
+              backgroundColor: "yellowgreen",
+              borderRadius: "9px",
+              border: "none",
+              padding: "7px",
+            }}
+            onClick={() => navigate("/")}
+          >
+            Back
+          </button>
         </div>
       </div>
       <div className="d-flex flex-wrap">
@@ -135,7 +132,7 @@ const CartCard = ({
           height: "auto",
         }}
       >
-        <img src={thumbnail} className="card-img-top" alt="..." />
+        <img src={thumbnail} className="card-img-top" alt={title} />
         <div className="card-body">
           <h5 className="card-title">{title}</h5>
           <div className="d-flex justify-content-between align-items-center">
@@ -145,12 +142,11 @@ const CartCard = ({
           <p className="text-center">{description}</p>
           <p className="text-center">Discount-{discountPercentage}%</p>
           <p className="text-center">Available Stock- {stock}</p>
-          <p className="text-center">Quantity - {quantity}</p>
           <div className="d-flex justify-content-between">
             <button className="btn btn-primary" onClick={handleAddOneItem}>
               +
             </button>
-
+            <span>{quantity}</span>
             <button className="btn btn-warning" onClick={handleRemoveOneItem}>
               -
             </button>
