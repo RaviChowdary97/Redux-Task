@@ -142,11 +142,12 @@ const CartCard = ({
           <p className="text-center">{description}</p>
           <p className="text-center">Discount-{discountPercentage}%</p>
           <p className="text-center">Available Stock- {stock}</p>
+          <p className="text-center">Quantity - {quantity}</p>
           <div className="d-flex justify-content-between">
             <button className="btn btn-primary" onClick={handleAddOneItem}>
               +
             </button>
-            <span>{quantity}</span>
+
             <button className="btn btn-warning" onClick={handleRemoveOneItem}>
               -
             </button>
