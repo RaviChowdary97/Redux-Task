@@ -1,16 +1,19 @@
 import CardUi from "./CardUi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "./CARTSLICE";
 import NavBar from "./NavBar";
 
 export default function CardList() {
   const dispatch = useDispatch();
-  const handleAddItem = (products) => {
-    console.log(products);
-    //click > displatch an action
-    // dispatch() > useDispatch()
-    dispatch(addItem(products));
+  const cartItems = useSelector((store) => store.cart.items);
+
+  const handleAddItem = (product) => {
+    const existingItem = cartItems.find((item) => item.id === product.id);
+    if (!existingItem) {
+      dispatch(addItem(product));
+    }
   };
+
   const products = [
     {
       id: 1,
@@ -83,6 +86,7 @@ export default function CardList() {
   return (
     <>
       <NavBar />
+
       <div
         className="d-flex flex-wrap  text-white "
         style={{
@@ -100,7 +104,7 @@ export default function CardList() {
             addItem={
               <button
                 className="btn btn-primary"
-                style={{ border: "none" }}
+                style={{ border: "none", width: "100%" }}
                 onClick={() => handleAddItem(elements)}
               >
                 Add Item Store

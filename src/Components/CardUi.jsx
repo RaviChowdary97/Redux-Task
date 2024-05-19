@@ -28,10 +28,8 @@ export default function CardUi({
           </div>
           <p className="text-center">{description}</p>
           <p className="text-center">Discount-{discountPercentage}%</p>
-
           <p className="text-center">Available Stock- {stock}</p>
-
-          <button className="btn btn-primary">{addItem}</button>
+          <div className="d-flex justify-content-center">{addItem}</div>
         </div>
       </div>
     </>

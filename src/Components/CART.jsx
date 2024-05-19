@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, clearItem, removeItem } from "./CARTSLICE";
+import { clearItem, removeItem, incrementQuantity } from "./CARTSLICE";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
@@ -15,7 +15,7 @@ const Cart = () => {
   const calculateTotalPrice = () => {
     let totalPrice = 0;
     cartItems.forEach((item) => {
-      totalPrice += item.price;
+      totalPrice += item.price * item.quantity;
     });
     return totalPrice;
   };
@@ -23,7 +23,7 @@ const Cart = () => {
   const shipping = () => {
     let totalPrice = 0;
     cartItems.forEach((item) => {
-      totalPrice += item.price;
+      totalPrice += item.price * item.quantity;
     });
     if (totalPrice > 200) {
       return "FREE";
@@ -37,59 +37,64 @@ const Cart = () => {
 
   return (
     <>
-      <div style={{ backgroundColor: "lightblue", padding: "20px" }}>
+      <div style={{ backgroundColor: "#F8F9FA", padding: "20px" }}>
+        <div style={{ textAlign: "center" }}>
+          <button
+            style={{
+              backgroundColor: "red",
+              borderRadius: "9px",
+              border: "none",
+              padding: "7px",
+              marginRight: "10px",
+              color: "white",
+            }}
+            onClick={() => handleClearCart()}
+          >
+            Clear Cart
+          </button>
+          <button
+            style={{
+              backgroundColor: "yellowgreen",
+              borderRadius: "9px",
+              border: "none",
+              padding: "7px",
+              color: "white",
+            }}
+            onClick={() => navigate("/")}
+          >
+            Back
+          </button>
+        </div>
         <div
           style={{
-            color: "green",
-            marginLeft: "500px",
+            color: "black",
+            fontWeight: "bold",
+            textAlign: "center",
             marginBottom: "9px",
           }}
         >
-          Total Quantity - {cartItems.length}
+          Total Quantity -{" "}
+          {cartItems.reduce((total, item) => total + item.quantity, 0)}
         </div>
 
         <div
-          style={{ marginLeft: "505px", color: "blue", marginBottom: "9px" }}
+          style={{ textAlign: "center", color: "#212529", marginBottom: "9px" }}
         >
           Total Price: ${calculateTotalPrice()}
         </div>
         <div
           style={{
-            marginLeft: "510px",
+            textAlign: "center",
             marginBottom: "9px",
             color: "brown",
           }}
         >
           SHIPPING : {shipping()}
         </div>
-        <button
-          style={{
-            backgroundColor: "red",
-            borderRadius: "9px",
-            marginLeft: "500px",
-            border: "none",
-            padding: "7px",
-          }}
-          onClick={() => handleClearCart()}
-        >
-          Clear Cart
-        </button>
-        <button
-          style={{
-            backgroundColor: "yellowgreen",
-            borderRadius: "9px",
-            border: "none",
-            marginLeft: "15px",
-            padding: "7px",
-          }}
-          onClick={() => navigate("/")}
-        >
-          Back
-        </button>
       </div>
       <div className="d-flex flex-wrap">
         {cartItems.map((element) => (
-          <CartCard {...element} />
+          <CartCard key={element.id} {...element} />
         ))}
       </div>
     </>
@@ -116,18 +121,7 @@ const CartCard = ({
   };
 
   const handleAddOneItem = () => {
-    dispatch(
-      addItem({
-        id,
-        title,
-        description,
-        thumbnail,
-        price,
-        discountPercentage,
-        rating,
-        stock,
-      })
-    );
+    dispatch(incrementQuantity(id));
   };
 
   return (
@@ -151,11 +145,12 @@ const CartCard = ({
           <p className="text-center">{description}</p>
           <p className="text-center">Discount-{discountPercentage}%</p>
           <p className="text-center">Available Stock- {stock}</p>
+          <p className="text-center">Quantity - {quantity}</p>
           <div className="d-flex justify-content-between">
             <button className="btn btn-primary" onClick={handleAddOneItem}>
               +
             </button>
-            <span>{quantity}</span>
+
             <button className="btn btn-warning" onClick={handleRemoveOneItem}>
               -
             </button>
